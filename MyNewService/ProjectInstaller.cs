@@ -26,6 +26,11 @@ namespace MyNewService
             string parameter = "MySource1\" \"MyLogFile1";
             Context.Parameters["assemblypath"] = "\"" + Context.Parameters["assemblypath"] + "\" \"" + parameter + "\"";
             base.OnBeforeInstall(savedState);
+         }
+
+        private void serviceInstaller1_AfterInstall(object sender, InstallEventArgs e)
+        {
+
         }
     }
 }
