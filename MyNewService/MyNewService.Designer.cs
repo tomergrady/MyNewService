@@ -1,6 +1,7 @@
 ﻿namespace MyNewService
 {
-    partial class Service1
+    //dsadsadsaas
+    partial class MyNewService
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,10 +29,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
-            this.ServiceName = "Service1";
+            this.eventLog1 = new System.Diagnostics.EventLog();
+            ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).BeginInit();
+            // 
+            // MyNewService
+            // 
+            this.ServiceName = "MyNewService";
+            ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).EndInit();
+
         }
 
         #endregion
+
+        private System.Diagnostics.EventLog eventLog1;
     }
 }
