@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 
 
-namespace MyNewService
+namespace ImageService
 {
-    public partial class MyNewService : ServiceBase
+    public partial class ImageService : ServiceBase
     {
         private System.ComponentModel.IContainer components;
         private System.Diagnostics.EventLog eventLog1;
@@ -41,7 +41,7 @@ namespace MyNewService
             public int dwWaitHint;
         };
 
-        public MyNewService()
+        public ImageService()
         {
             InitializeComponent();
             eventLog1 = new System.Diagnostics.EventLog();
@@ -54,7 +54,7 @@ namespace MyNewService
             eventLog1.Log = "MyNewLog";
         }
 
-        public MyNewService(string[] args)
+        public ImageService(string[] args)
         {
             InitializeComponent();
             string eventSourceName = "MySource";

@@ -1,7 +1,7 @@
-﻿namespace MyNewService
+﻿namespace ImageService
 {
-    //dsadsadsaas
-    partial class MyNewService
+
+    partial class ImageService
     {
 
         /// <summary>
@@ -28,9 +28,9 @@
             this.eventLog1 = new System.Diagnostics.EventLog();
             ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).BeginInit();
             // 
-            // MyNewService
+            // ImageService
             // 
-            this.ServiceName = "MyNewService";
+            this.ServiceName = "ImageService";
             ((System.ComponentModel.ISupportInitialize)(this.eventLog1)).EndInit();
 
         }
