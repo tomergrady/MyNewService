@@ -48,7 +48,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>MyNewService.Program</StartupObject>
+    <StartupObject>ImageService.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -64,6 +64,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ImageModel\IImageServiceModal.cs" />
+    <Compile Include="ImageModel\ImageServiceModal.cs" />
     <Compile Include="Logging\ILoogingService.cs" />
     <Compile Include="ImageService.cs">
       <SubType>Component</SubType>
