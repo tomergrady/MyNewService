@@ -65,15 +65,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ImageModel\Event\CommandRecievedEventArgs.cs" />
-    <Compile Include="ImageModel\Event\DirectoryCloseEventArgs.cs" />
-    <Compile Include="ImageModel\IImageServiceModal.cs" />
-    <Compile Include="ImageModel\ImageServiceModal.cs" />
+    <Compile Include="ImageService\Controller\IImageController.cs" />
+    <Compile Include="ImageService\ImageModel\Event\CommandRecievedEventArgs.cs" />
+    <Compile Include="ImageService\ImageModel\Event\DirectoryCloseEventArgs.cs" />
+    <Compile Include="ImageService\ImageModel\IImageServiceModal.cs" />
+    <Compile Include="ImageService\ImageModel\ImageServiceModal.cs" />
     <Compile Include="ImageService\Commands\ICommand.cs" />
     <Compile Include="ImageService\Commands\NewFileCommand.cs" />
     <Compile Include="ImageService\Controller\Handlers\DirectoyHandler.cs" />
     <Compile Include="ImageService\Controller\Handlers\IDirectoryHandler.cs" />
-    <Compile Include="ImageService\Controller\IImageController.cs" />
     <Compile Include="ImageService\Controller\ImageController.cs" />
     <Compile Include="ImageService\Server\ImagerServer.cs" />
     <Compile Include="Logging\ILoogingService.cs" />
