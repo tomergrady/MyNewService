@@ -56,8 +56,9 @@ namespace ImageService.Controller.Handlers
                 DateTime date = GetDateTakenFromImage(e.FullPath);
                 args[2] = date.Year.ToString();
                 args[3] = date.Month.ToString();
+                bool result;
                 this.m_logging.Log("new file in directory of path: " + this.m_path, MessageTypeEnum.INFO);
-                this.m_controller.ExecuteCommand((int) CommandEnum.NewFileCommand, args, out bool result); 
+                this.m_controller.ExecuteCommand((int) CommandEnum.NewFileCommand, args, out result); 
             });
             
             }    
