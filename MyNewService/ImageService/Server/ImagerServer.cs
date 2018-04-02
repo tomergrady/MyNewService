@@ -31,6 +31,7 @@ namespace ImageService.Server
             {
                 // create handler for each path
                 directoryHandlers[i] = new DirectoyHandler(m_controller, m_logging, paths[i]);
+                directoryHandlers[i].StartHandleDirectory(paths[i]);
                 this.CommandRecieved += directoryHandlers[i].OnCommandRecieved;
                 directoryHandlers[i].DirectoryClose += this.RemoveDirectoryHandler;
             }

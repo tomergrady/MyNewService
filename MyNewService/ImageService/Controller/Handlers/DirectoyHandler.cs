@@ -18,25 +18,37 @@ namespace ImageService.Controller.Handlers
         #region Members
         private IImageController m_controller;              // The Image Processing Controller
         private ILoggingService m_logging;
-        private FileSystemWatcher m_dirWatcher;             // The Watcher of the Dir
+        private List<FileSystemWatcher> m_dirWatchers;             // The Watcher of the Dir
         private string m_path;                              // The Path of directory
 
         public event EventHandler<DirectoryCloseEventArgs> DirectoryClose;              // The Event That Notifies that the Directory is being closed
         #endregion
         private static Regex r = new Regex(":");
 
-
+        
+        // The Event that will be activated upon new Command
+        public DirectoyHandler(IImageController controller, ILoggingService logger, String inputPath)
+        {
+            this.m_controller = controller;
+            this.m_logging = logger;
+            this.m_path = inputPath;
+        }
 
         public void StartHandleDirectory(string dirPath)
         {
             this.m_logging.Log("starting to handling the directory in path: " + dirPath, MessageTypeEnum.INFO);
             this.m_path = dirPath;
-            this.m_dirWatcher = new FileSystemWatcher(this.m_path)
+
+            string[] extension = {"*.jpg", "*.png", "*.gif", "*.bmp"};
+            for (int i = 0; i < extension.Length ; i ++) {
+            this.m_dirWatchers[i] = new FileSystemWatcher(this.m_path, extension[i])
             {
                 IncludeSubdirectories = true,
                 NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite //notifies for creation of new file
             };
-            this.m_dirWatcher.Changed += new FileSystemEventHandler(delegate (object sender, FileSystemEventArgs e)
+            this.m_dirWatchers[i].EnableRaisingEvents = true;
+
+            this.m_dirWatchers[i].Changed += new FileSystemEventHandler(delegate (object sender, FileSystemEventArgs e)
             {
                 string[] args = new string[4];
                 args[0] = this.m_path;
@@ -47,7 +59,9 @@ namespace ImageService.Controller.Handlers
                 this.m_logging.Log("new file in directory of path: " + this.m_path, MessageTypeEnum.INFO);
                 this.m_controller.ExecuteCommand((int) CommandEnum.NewFileCommand, args, out bool result); 
             });
-        }            
+            
+            }    
+        }
         // The Function Recieves the directory to Handle
 
 
@@ -59,19 +73,15 @@ namespace ImageService.Controller.Handlers
                 case (int) CommandEnum.CloseCommand:
                     this.CloseDirectory();
                     DirectoryClose?.Invoke(this, new DirectoryCloseEventArgs(this.m_path, "closing"));
+                    for (int i = 0; i< 4;i ++) {
+                        this.m_dirWatchers[i].Dispose();
+                    }
                     break;
                 default:
                     throw new ArgumentException();
             }
         }
 
-        // The Event that will be activated upon new Command
-        public DirectoyHandler(IImageController controller, ILoggingService logger, String inputPath)
-        {
-            this.m_controller = controller;
-            this.m_logging = logger;
-            this.m_path = inputPath;
-        }
     
 
 
