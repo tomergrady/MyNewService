@@ -71,7 +71,7 @@ namespace ImageService.Controller.Handlers
             {
                 //close command
                 case (int) CommandEnum.CloseCommand:
-                    this.CloseDirectory();
+                    this.m_logging.Log("closing Directory Handler of directory in path: " + this.m_path, MessageTypeEnum.INFO);
                     DirectoryClose?.Invoke(this, new DirectoryCloseEventArgs(this.m_path, "closing"));
                     for (int i = 0; i< 4;i ++) {
                         this.m_dirWatchers[i].Dispose();
@@ -95,11 +95,6 @@ namespace ImageService.Controller.Handlers
                 string dateTaken = r.Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
                 return DateTime.Parse(dateTaken);
             }
-        }
-
-         private void CloseDirectory()
-        {
-            this.m_logging.Log("closing Directory Handler of directory in path: " + this.m_path, MessageTypeEnum.INFO);
         }
     }
 }
