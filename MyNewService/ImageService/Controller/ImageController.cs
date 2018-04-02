@@ -12,20 +12,24 @@ namespace ImageService.Controller
 {
     public class ImageController : IImageController
     {
-        private IImageServiceModal m_modal;                      // The Modal Object
+        private IImageServiceModal imageModal;                      // The Modal Object
         private Dictionary<int, ICommand> commands;
 
         public ImageController(IImageServiceModal modal)
         {
-            m_modal = modal;                    // Storing the Modal Of The System
-            commands = new Dictionary<int, ICommand>()
-            {
-				// For Now will contain NEW_FILE_COMMAND
-            };
+            imageModal = modal;                    // Storing the Modal Of The System
+            commands = new Dictionary<int, ICommand>() {};
+            commands[0] = new NewFileCommand(modal); 
         }
         public string ExecuteCommand(int commandID, string[] args, out bool resultSuccesful)
         {
-           // Write Code Here
+            // CHECKKKKKKKKKK WHEN THE COMMAND DOESNT EXIST WHAT HAPPENS
+            if (commands.Keys.Contains<int>(commandID)) {
+                return commands[commandID].Execute(args, out resultSuccesful);
+            } else {
+                resultSuccesful = false;
+                return "Failed with the command";
+            }
         }
     }
 }

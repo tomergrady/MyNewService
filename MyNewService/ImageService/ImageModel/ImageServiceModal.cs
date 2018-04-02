@@ -16,8 +16,12 @@ namespace ImageService.Modal
     {
         #region Members
         public string m_OutputFolder { get; set; }            // The Output Folder
-        public int m_thumbnailSize { get; set; }              // The Size Of The Thumbnail Size
+        public int m_thumbnailSize { get; set; }
+        // The Size Of The Thumbnail Size
+        #endregion
+
         public string AddFile(string path, out bool result)
+
         {
             try
             {
@@ -47,6 +51,5 @@ namespace ImageService.Modal
             }
 
         }
-        #endregion
     }
 }

@@ -75,6 +75,7 @@
     <Compile Include="ImageService\Controller\Handlers\DirectoyHandler.cs" />
     <Compile Include="ImageService\Controller\Handlers\IDirectoryHandler.cs" />
     <Compile Include="ImageService\Controller\ImageController.cs" />
+    <Compile Include="ImageService\Infrastructure\CommandEnum.cs" />
     <Compile Include="ImageService\Server\ImagerServer.cs" />
     <Compile Include="Logging\ILoogingService.cs" />
     <Compile Include="ImageService.cs">

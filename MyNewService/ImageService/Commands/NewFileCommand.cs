@@ -10,16 +10,17 @@ namespace ImageService.Commands
 {
     public class NewFileCommand : ICommand
     {
-        private IImageServiceModal m_modal;
+        private IImageServiceModal modal;
 
-        public NewFileCommand(IImageServiceModal modal)
+        public NewFileCommand(IImageServiceModal newModal)
         {
-            m_modal = modal;            // Storing the Modal
+            modal = newModal;            // Storing the Modal
         }
 
         public string Execute(string[] args, out bool result)
         {
-			// The String Will Return the New Path if result = true, and will return the error message
+            return modal.AddFile(args[0], out result);
+            // The String Will Return the New Path if result = true, and will return the error message
         }
     }
 }
