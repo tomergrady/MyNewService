@@ -15,8 +15,8 @@ namespace ImageService.Modal
     public class ImageServiceModal : IImageServiceModal
     {
         #region Members
-        public string m_OutputFolder { get; set; }            // The Output Folder
-        public int m_thumbnailSize { get; set; }
+        public string OutputFolder { get; set; }            // The Output Folder
+        public int thumbnailSize { get; set; }
         // The Size Of The Thumbnail Size
         #endregion
 
@@ -25,20 +25,20 @@ namespace ImageService.Modal
         {
             try
             {
-                //System.IO.File.Copy(path, m_OutputFolder, true);
+                //System.IO.File.Copy(path, OutputFolder, true);
                 DateTime inputFileTime = File.GetCreationTime(path);
                 String year = inputFileTime.Year.ToString();
                 String month = inputFileTime.Month.ToString();
-                Directory.CreateDirectory(m_OutputFolder);
-                Directory.CreateDirectory(m_OutputFolder + "\\" + year);
-                Directory.CreateDirectory(m_OutputFolder + "\\" + year + "\\" + month);
-                Directory.CreateDirectory(m_OutputFolder + "\\" + "Thumbnails");
-                Directory.CreateDirectory(m_OutputFolder + "\\" + "Thumbnails" + "\\" + year);
-                Directory.CreateDirectory(m_OutputFolder + "\\" + "Thumbnails" + "\\" + year + "\\" + month);
-                string finalOutputPath = m_OutputFolder + "\\" + year + "\\" + month + "\\";
-                string finalOutputTPath = m_OutputFolder + "\\" + "Thumbnails" + year + "\\" + month + "\\";
+                Directory.CreateDirectory(OutputFolder);
+                Directory.CreateDirectory(OutputFolder + "\\" + year);
+                Directory.CreateDirectory(OutputFolder + "\\" + year + "\\" + month);
+                Directory.CreateDirectory(OutputFolder + "\\" + "Thumbnails");
+                Directory.CreateDirectory(OutputFolder + "\\" + "Thumbnails" + "\\" + year);
+                Directory.CreateDirectory(OutputFolder + "\\" + "Thumbnails" + "\\" + year + "\\" + month);
+                string finalOutputPath = OutputFolder + "\\" + year + "\\" + month + "\\";
+                string finalOutputTPath = OutputFolder + "\\" + "Thumbnails" + year + "\\" + month + "\\";
                 Image thumbnail = Image.FromFile(path);
-                thumbnail = (Image)(new Bitmap(thumbnail, new Size(this.m_thumbnailSize, this.m_thumbnailSize)));
+                thumbnail = (Image)(new Bitmap(thumbnail, new Size(this.thumbnailSize, this.thumbnailSize)));
                 thumbnail.Save(finalOutputTPath);
                 File.Move(path, finalOutputPath);
                 result = true;

@@ -15,8 +15,8 @@ namespace ImageService.Server
     {
 
         #region Members
-        private IImageController m_controller;
-        private ILoggingService m_logging;
+        private IImageController controller;
+        private ILoggingService logger;
         public event EventHandler<CommandRecievedEventArgs> CommandRecieved;
         private DirectoyHandler[] directoryHandlers;
         #endregion
@@ -24,12 +24,12 @@ namespace ImageService.Server
         public ImageServer(IImageController controller, ILoggingService logger, string[] paths, int numOfPaths)
         {
             
-            this.m_controller = controller;
-            this.m_logging = logger;
+            this.controller = controller;
+            this.logger = logger;
             for (int i = 0; i < numOfPaths; i++)
             {
                 // create handler for each path
-                directoryHandlers[i] = new DirectoyHandler(m_controller, m_logging, paths[i]);
+                directoryHandlers[i] = new DirectoyHandler(this.controller, this.logger, paths[i]);
                 this.CommandRecieved += directoryHandlers[i].OnCommandRecieved;
 
             }
