@@ -42,26 +42,42 @@ namespace ImageService.Controller.Handlers
             string[] extension = {"*.jpg", "*.png", "*.gif", "*.bmp"};
             this.m_dirWatchers = new FileSystemWatcher[10];
             for (int i = 0; i < extension.Length ; i ++) {
-            this.m_dirWatchers[i] = new FileSystemWatcher(this.m_path, extension[i])
-            {
-                IncludeSubdirectories = true,
-                NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite //notifies for creation of new file
-            };
-            this.m_dirWatchers[i].EnableRaisingEvents = true;
+                this.m_dirWatchers[i] = new FileSystemWatcher(this.m_path, extension[i])
+                {
+                    IncludeSubdirectories = true,
+                    NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite //notifies for creation of new file
+                };
+                this.m_dirWatchers[i].EnableRaisingEvents = true;
+                this.m_dirWatchers[i].Changed += new FileSystemEventHandler(delegate (object sender, FileSystemEventArgs e)
+                {
+                    string[] args = new string[4];
+                    args[0] = this.m_path;
+                    args[1] = e.Name;
+                    DateTime date = GetDateTakenFromImage(e.FullPath, this.m_logging);
+                    args[2] = date.Year.ToString();
+                    args[3] = date.Month.ToString();
+                    bool result;
+                    this.m_logging.Log("new file in directory of path: " + this.m_path, MessageTypeEnum.INFO);
+                    string s = this.m_controller.ExecuteCommand((int) CommandEnum.NewFileCommand, args, out result); 
+                    this.m_logging.Log(s, MessageTypeEnum.INFO);
 
-            this.m_dirWatchers[i].Changed += new FileSystemEventHandler(delegate (object sender, FileSystemEventArgs e)
-            {
-                string[] args = new string[4];
-                args[0] = this.m_path;
-                args[1] = e.Name;
-                DateTime date = GetDateTakenFromImage(e.FullPath);
-                args[2] = date.Year.ToString();
-                args[3] = date.Month.ToString();
-                bool result;
-                this.m_logging.Log("new file in directory of path: " + this.m_path, MessageTypeEnum.INFO);
-                this.m_controller.ExecuteCommand((int) CommandEnum.NewFileCommand, args, out result); 
-            });
-            
+                });
+                this.m_dirWatchers[i].Created += new FileSystemEventHandler(delegate (object sender, FileSystemEventArgs e)
+                {
+                    string[] args = new string[4];
+                    args[0] = this.m_path;
+                    args[1] = e.Name;
+                    DateTime date = GetDateTakenFromImage(e.FullPath, this.m_logging);
+                    args[2] = date.Year.ToString();
+                    args[3] = date.Month.ToString();
+                    bool result;
+                    this.m_logging.Log("new file in directory of path: " + this.m_path, MessageTypeEnum.INFO);
+                    this.m_controller.ExecuteCommand((int) CommandEnum.NewFileCommand, args, out result); 
+                    string s = this.m_controller.ExecuteCommand((int) CommandEnum.NewFileCommand, args, out result); 
+                    this.m_logging.Log(s, MessageTypeEnum.INFO);
+                });
+                
+                this.m_logging.Log("Created filehandler num" + i, MessageTypeEnum.INFO);
             }    
         }
         // The Function Recieves the directory to Handle
@@ -88,8 +104,9 @@ namespace ImageService.Controller.Handlers
 
 
         //retrieves the datetime WITHOUT loading the whole image
-        private static DateTime GetDateTakenFromImage(string path)
+        private static DateTime GetDateTakenFromImage(string path, ILoggingService ilS)
         {
+            ilS.Log("GetDateTakenFromImage: " + path, MessageTypeEnum.INFO);
             using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read))
             using (System.Drawing.Image myImage = System.Drawing.Image.FromStream(fs, false, false))
             {

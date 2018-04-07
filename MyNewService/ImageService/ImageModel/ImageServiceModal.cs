@@ -37,18 +37,20 @@ namespace ImageService.Modal
                 Directory.CreateDirectory(OutputFolder + "\\" + "Thumbnails" + "\\" + year + "\\" + month);
                 string finalOutputPath = OutputFolder + "\\" + year + "\\" + month + "\\";
                 string finalOutputTPath = OutputFolder + "\\" + "Thumbnails" + year + "\\" + month + "\\";
+                
+                //new file
                 Image thumbnail = Image.FromFile(path);
                 thumbnail = (Image)(new Bitmap(thumbnail, new Size(this.thumbnailSize, this.thumbnailSize)));
-                thumbnail.Save(finalOutputTPath);
+                thumbnail.Save(finalOutputTPath + Path.GetFileName(path));
                 //add check if 
-                File.Move(path, finalOutputPath);
+                File.Move(path, finalOutputPath + Path.GetFileName(path));
                 result = true;
                 return "The file: " + Path.GetFileName(path) + " is now added to " + finalOutputPath +
                     " and also to the thumbnails folder";
             } catch (Exception ex)
             {
                 result = false;
-                return ex.ToString();
+                return ex.ToString() + path;
             }
 
         }

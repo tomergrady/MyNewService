@@ -14,7 +14,7 @@ using ImageService.Modal;
 using ImageService.Controller;
 using ImageService.Logging;
 using ImageService.Infrastructure;
-using  ImageService.Logging.Modal;
+using ImageService.Logging.Modal;
 
 namespace ImageService
 {
@@ -81,7 +81,7 @@ namespace ImageService
             };
             this.controller = new ImageController(this.modal);
             this.logging = new LoggingService();
-            this.logging.MessageRecieved += WriteMessage;
+            this.logging.MessageRecieved += this.WriteMessage;
             string[] directories = (ConfigurationManager.AppSettings.Get("Handler").Split(';'));
             this.imageServer = new ImageServer(this.controller, this.logging, directories, directories.Length);
         }
@@ -134,9 +134,22 @@ namespace ImageService
         
         public void WriteMessage(Object sender, MessageRecievedEventArgs e)
         {
-            eventLog1.WriteEntry(e.Message, GetType(e.Status));
+            eventLog1.WriteEntry(e.message, GetType(e.status));
         }
-
+        
+        private EventLogEntryType GetType(MessageTypeEnum status)
+        {
+            switch (status)
+            {
+                case MessageTypeEnum.FAIL:
+                    return EventLogEntryType.Error;
+                case MessageTypeEnum.WARNING:
+                    return EventLogEntryType.Warning;
+                case MessageTypeEnum.INFO:
+                default:
+                    return EventLogEntryType.Information;
+            }
+        }
         [DllImport("advapi32.dll", SetLastError = true)]
         private static extern bool SetServiceStatus(IntPtr handle, ref ServiceStatus serviceStatus);
     }
