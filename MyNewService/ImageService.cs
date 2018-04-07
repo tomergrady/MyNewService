@@ -14,6 +14,7 @@ using ImageService.Modal;
 using ImageService.Controller;
 using ImageService.Logging;
 using ImageService.Infrastructure;
+using  ImageService.Logging.Modal;
 
 namespace ImageService
 {
@@ -80,6 +81,7 @@ namespace ImageService
             };
             this.controller = new ImageController(this.modal);
             this.logging = new LoggingService();
+            this.logging.MessageRecieved += WriteMessage;
             string[] directories = (ConfigurationManager.AppSettings.Get("Handler").Split(';'));
             this.imageServer = new ImageServer(this.controller, this.logging, directories, directories.Length);
         }
@@ -129,8 +131,16 @@ namespace ImageService
         {
             eventLog1.WriteEntry("In OnPause.");
         }
+        
+        public void WriteMessage(Object sender, MessageRecievedEventArgs e)
+        {
+            eventLog1.WriteEntry(e.Message, GetType(e.Status));
+        }
 
         [DllImport("advapi32.dll", SetLastError = true)]
         private static extern bool SetServiceStatus(IntPtr handle, ref ServiceStatus serviceStatus);
     }
+
+    
+
 }
