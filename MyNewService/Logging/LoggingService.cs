@@ -15,7 +15,7 @@ namespace ImageService.Logging
         public void Log(string message, MessageTypeEnum type)
         {
             MessageRecieved?.Invoke(this, new MessageRecievedEventArgs(type, message));
-            ImageServiceModal gfaf = new ImageServiceModal();
+            //ImageServiceModal gfaf = new ImageServiceModal();
                         
         }
     }
