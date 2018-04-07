@@ -24,7 +24,7 @@ namespace ImageService.Server
 
         public ImageServer(IImageController controller, ILoggingService logger, string[] paths, int numOfPaths)
         {
-            
+            this.directoryHandlers = new DirectoyHandler[10];
             this.m_controller = controller;
             this.m_logging = logger;
             for (int i = 0; i < numOfPaths; i++)

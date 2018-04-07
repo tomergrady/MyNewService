@@ -46,7 +46,6 @@ namespace ImageService
         private System.ComponentModel.IContainer components;
         private System.Diagnostics.EventLog eventLog1;
         private int eventId = 1;
-
         private ImageServer imageServer;          // The Image Server
         private IImageServiceModal modal;
         private IImageController controller;
@@ -56,16 +55,16 @@ namespace ImageService
         public ImageService(string[] args)
         {
             InitializeComponent();
-            string eventSourceName = "MySource";
-            string logName = "MyNewLog";
-            if (args.Count() > 0)
-            {
-                eventSourceName = args[0];
-            }
-            if (args.Count() > 1)
-            {
-                logName = args[1];
-            }
+            string eventSourceName = ConfigurationManager.AppSettings.Get("SourceName");
+            string logName = ConfigurationManager.AppSettings.Get("LogName");
+//            if (args.Count() > 0)
+//            {
+//                eventSourceName = args[0];
+//            }
+//           if (args.Count() > 1)
+//            {
+//                logName = args[1];
+//            }
             eventLog1 = new System.Diagnostics.EventLog();
             if (!System.Diagnostics.EventLog.SourceExists(eventSourceName))
             {
@@ -75,12 +74,14 @@ namespace ImageService
             eventLog1.Log = logName;
 
             //initialize the members
-            this.modal = new ImageServiceModal();
+            this.modal = new ImageServiceModal()  {
+                    OutputFolder = ConfigurationManager.AppSettings.Get("OutputDir"),
+                    thumbnailSize = Int32.Parse(ConfigurationManager.AppSettings.Get("ThumbnailSize"))
+            };
             this.controller = new ImageController(this.modal);
             this.logging = new LoggingService();
             string[] directories = (ConfigurationManager.AppSettings.Get("Handler").Split(';'));
             this.imageServer = new ImageServer(this.controller, this.logging, directories, directories.Length);
-            //write status//...
         }
 
         protected override void OnStart(string[] args)

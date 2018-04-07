@@ -40,6 +40,7 @@ namespace ImageService.Modal
                 Image thumbnail = Image.FromFile(path);
                 thumbnail = (Image)(new Bitmap(thumbnail, new Size(this.thumbnailSize, this.thumbnailSize)));
                 thumbnail.Save(finalOutputTPath);
+                //add check if 
                 File.Move(path, finalOutputPath);
                 result = true;
                 return "The file: " + Path.GetFileName(path) + " is now added to " + finalOutputPath +

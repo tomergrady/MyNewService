@@ -18,7 +18,7 @@ namespace ImageService.Controller.Handlers
         #region Members
         private IImageController m_controller;              // The Image Processing Controller
         private ILoggingService m_logging;
-        private List<FileSystemWatcher> m_dirWatchers;             // The Watcher of the Dir
+        private FileSystemWatcher[] m_dirWatchers;             // The Watcher of the Dir
         private string m_path;                              // The Path of directory
 
         public event EventHandler<DirectoryCloseEventArgs> DirectoryClose;              // The Event That Notifies that the Directory is being closed
@@ -40,6 +40,7 @@ namespace ImageService.Controller.Handlers
             this.m_path = dirPath;
 
             string[] extension = {"*.jpg", "*.png", "*.gif", "*.bmp"};
+            this.m_dirWatchers = new FileSystemWatcher[10];
             for (int i = 0; i < extension.Length ; i ++) {
             this.m_dirWatchers[i] = new FileSystemWatcher(this.m_path, extension[i])
             {
