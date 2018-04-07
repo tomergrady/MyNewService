@@ -8,51 +8,50 @@ using System.ServiceProcess;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
-
+using System.Configuration;
+using ImageService.Server;
+using ImageService.Modal;
+using ImageService.Controller;
+using ImageService.Logging;
+using ImageService.Infrastructure;
 
 namespace ImageService
 {
+
+    public enum ServiceState
+    {
+        SERVICE_STOPPED = 0x00000001,
+        SERVICE_START_PENDING = 0x00000002,
+        SERVICE_STOP_PENDING = 0x00000003,
+        SERVICE_RUNNING = 0x00000004,
+        SERVICE_CONTINUE_PENDING = 0x00000005,
+        SERVICE_PAUSE_PENDING = 0x00000006,
+        SERVICE_PAUSED = 0x00000007,
+    }
+    [StructLayout(LayoutKind.Sequential)]
+    public struct ServiceStatus
+    {
+        public int dwServiceType;
+        public ServiceState dwCurrentState;
+        public int dwControlsAccepted;
+        public int dwWin32ExitCode;
+        public int dwServiceSpecificExitCode;
+        public int dwCheckPoint;
+        public int dwWaitHint;
+    };
+
+
     public partial class ImageService : ServiceBase
     {
         private System.ComponentModel.IContainer components;
         private System.Diagnostics.EventLog eventLog1;
         private int eventId = 1;
 
-        public enum ServiceState
-        {
-            SERVICE_STOPPED = 0x00000001,
-            SERVICE_START_PENDING = 0x00000002,
-            SERVICE_STOP_PENDING = 0x00000003,
-            SERVICE_RUNNING = 0x00000004,
-            SERVICE_CONTINUE_PENDING = 0x00000005,
-            SERVICE_PAUSE_PENDING = 0x00000006,
-            SERVICE_PAUSED = 0x00000007,
-        }
+        private ImageServer imageServer;          // The Image Server
+        private IImageServiceModal modal;
+        private IImageController controller;
+        private ILoggingService logging;
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct ServiceStatus
-        {
-            public int dwServiceType;
-            public ServiceState dwCurrentState;
-            public int dwControlsAccepted;
-            public int dwWin32ExitCode;
-            public int dwServiceSpecificExitCode;
-            public int dwCheckPoint;
-            public int dwWaitHint;
-        };
-
-        public ImageService()
-        {
-            InitializeComponent();
-            eventLog1 = new System.Diagnostics.EventLog();
-            if (!System.Diagnostics.EventLog.SourceExists("MySource"))
-            {
-                System.Diagnostics.EventLog.CreateEventSource(
-                    "MySource", "MyNewLog");
-            }
-            eventLog1.Source = "MySource";
-            eventLog1.Log = "MyNewLog";
-        }
 
         public ImageService(string[] args)
         {
@@ -74,6 +73,14 @@ namespace ImageService
             }
             eventLog1.Source = eventSourceName;
             eventLog1.Log = logName;
+
+            //initialize the members
+            this.modal = new ImageServiceModal();
+            this.controller = new ImageController(this.modal);
+            this.logging = new LoggingService();
+            string[] directories = (ConfigurationManager.AppSettings.Get("Handler").Split(';'));
+            this.imageServer = new ImageServer(this.controller, this.logging, directories, directories.Length);
+            //write status//...
         }
 
         protected override void OnStart(string[] args)
@@ -99,6 +106,10 @@ namespace ImageService
         protected override void OnStop()
         {
             eventLog1.WriteEntry("In onStop.");
+            eventLog1.WriteEntry("Tells server to stop.");
+            this.imageServer.CloseServer();
+
+
 
         }
 
