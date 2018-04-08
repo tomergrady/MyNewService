@@ -23,12 +23,11 @@ namespace ImageService.Controller
         }
         public string ExecuteCommand(int commandID, string[] args, out bool resultSuccesful)
         {
-            // CHECKK WHEN THE COMMAND DOESNT EXIST WHAT HAPPENS
             if (commands.Keys.Contains<int>(commandID)) {
                 return commands[commandID].Execute(args, out resultSuccesful);
             } else {
                 resultSuccesful = false;
-                return "Failed with the command";
+                return "Command doesn't exist, failed";
             }
         }
     }

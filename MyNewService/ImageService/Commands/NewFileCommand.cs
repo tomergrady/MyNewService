@@ -19,7 +19,7 @@ namespace ImageService.Commands
 
         public string Execute(string[] args, out bool result)
         {
-            return modal.AddFile(args[0] + "\\" + args[1], out result);
+            return modal.AddFile(args, out result);
             // The String Will Return the New Path if result = true, and will return the error message
         }
     }
