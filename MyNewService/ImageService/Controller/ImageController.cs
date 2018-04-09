@@ -21,6 +21,7 @@ namespace ImageService.Controller
             commands = new Dictionary<int, ICommand>() {};
             commands[0] = new NewFileCommand(modal); 
         }
+
         public string ExecuteCommand(int commandID, string[] args, out bool resultSuccesful)
         {
             if (commands.Keys.Contains<int>(commandID)) {

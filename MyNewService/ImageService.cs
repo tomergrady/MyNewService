@@ -58,14 +58,6 @@ namespace ImageService
             InitializeComponent();
             string eventSourceName = ConfigurationManager.AppSettings.Get("SourceName");
             string logName = ConfigurationManager.AppSettings.Get("LogName");
-//            if (args.Count() > 0)
-//            {
-//                eventSourceName = args[0];
-//            }
-//           if (args.Count() > 1)
-//            {
-//                logName = args[1];
-//            }
             eventLog1 = new System.Diagnostics.EventLog();
             if (!System.Diagnostics.EventLog.SourceExists(eventSourceName))
             {
@@ -111,9 +103,6 @@ namespace ImageService
             eventLog1.WriteEntry("In onStop.");
             eventLog1.WriteEntry("Tells server to stop.");
             this.imageServer.CloseServer();
-
-
-
         }
 
         public void OnTimer(object sender, System.Timers.ElapsedEventArgs args)
@@ -153,7 +142,4 @@ namespace ImageService
         [DllImport("advapi32.dll", SetLastError = true)]
         private static extern bool SetServiceStatus(IntPtr handle, ref ServiceStatus serviceStatus);
     }
-
-    
-
 }

@@ -20,10 +20,8 @@ namespace ImageService.Controller.Handlers
         private ILoggingService m_logging;
         private FileSystemWatcher[] m_dirWatchers;             // The Watcher of the Dir
         private string m_path;                              // The Path of directory
-
         public event EventHandler<DirectoryCloseEventArgs> DirectoryClose;              // The Event That Notifies that the Directory is being closed
         #endregion
-        private static Regex r = new Regex(":");
 
         
         // The Event that will be activated upon new Command
@@ -54,7 +52,6 @@ namespace ImageService.Controller.Handlers
                     args[0] = this.m_path;
                     args[1] = e.Name;
                     DateTime date = GetExplorerFileDate(e.FullPath);
-
                     this.m_logging.Log("GetDateTakenFromImage: " + args[0], MessageTypeEnum.INFO);
                     args[2] = date.Year.ToString();
                     args[3] = date.Month.ToString();
@@ -86,27 +83,8 @@ namespace ImageService.Controller.Handlers
                     throw new ArgumentException();
             }
         }
-        ////
+
     
-
-
-        //retrieves the datetime WITHOUT loading the whole image
-        private static DateTime GetDateTakenFromImage(string path, ILoggingService ilS)
-        {
-            FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
-            using (fs)
-            using (System.Drawing.Image myImage = System.Drawing.Image.FromStream(fs, false, false))
-            {
-                System.Drawing.Imaging.PropertyItem propItem = myImage.GetPropertyItem(36867);
-                string dateTaken = r.Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
-                fs.Close();
-               // ilS.Log("GetDateTakenFromImage: " + path, MessageTypeEnum.INFO);
-
-                return DateTime.Parse(dateTaken);
-            }
-            
-        }
-
         private static DateTime GetExplorerFileDate(string filename)
         {
             DateTime now = DateTime.Now;
